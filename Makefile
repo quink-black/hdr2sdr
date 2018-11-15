@@ -1,14 +1,19 @@
 CXXFLAGS := -g -O0 -std=c++11 -I.
-#CXXFLAGS += -fsanitize=address
+CXXFLAGS += -fsanitize=address
 LDFLAGS :=
 
 BUILD_DIR := build
 OBJ := $(BUILD_DIR)/image.o \
-	$(BUILD_DIR)/image_unittest.o \
+	$(BUILD_DIR)/tonemapper.o \
 
-HEADER := image.h stb_image.h stb_image_write.h
+HEADER := image.h \
+	stb_image.h \
+	stb_image_write.h \
+	tonemapper.h
 
-all: build build/.sum image_unittest
+BIN := image_unittest tonemapper_unittest
+
+all: build build/.sum $(BIN)
 
 build:
 	mkdir $@
@@ -17,8 +22,11 @@ build/.sum: $(HEADER) Makefile
 	touch *.cpp
 	touch $@
 
-image_unittest: $(OBJ)
-	$(CXX) $(CXXFLAGS) $(OBJ) -o $@ $(LDFLAGS)
+image_unittest: $(OBJ) $(BUILD_DIR)/image_unittest.o
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+
+tonemapper_unittest: $(OBJ) $(BUILD_DIR)/tonemapper_unittest.o
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
 %.o: ../%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@

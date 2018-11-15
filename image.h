@@ -36,6 +36,9 @@ public:
 
 class ImageLoader {
 public:
+    ImageLoader() = delete;
+    ~ImageLoader() = delete;
+
     using DecoderBuilderListType = std::vector<std::shared_ptr<ImageDecoder::DecoderBuilder>>;
     static std::unique_ptr<Image> LoadImage(const std::string &file);
 
