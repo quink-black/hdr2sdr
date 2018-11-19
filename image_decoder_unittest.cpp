@@ -1,4 +1,4 @@
-#include "image.h"
+#include "image_decoder.h"
 
 #include <stdio.h>
 #include <stdlib.h>

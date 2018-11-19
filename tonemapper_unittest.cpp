@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <limits>
 
+#include "image_decoder.h"
+
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
