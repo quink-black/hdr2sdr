@@ -12,7 +12,7 @@ public:
         std::unique_ptr<ImageDecoder> Create() const override;
     };
 
-    std::unique_ptr<Image> Decode(const std::string &file) override;
+    std::unique_ptr<Image<float>> Decode(const std::string &file) override;
 };
 
 int PfmDecoder::PfmDecoderBuilder::Probe(const std::string &file) const {
@@ -30,7 +30,7 @@ std::unique_ptr<ImageDecoder> PfmDecoder::PfmDecoderBuilder::Create() const {
     return std::unique_ptr<ImageDecoder>(new PfmDecoder());
 }
 
-std::unique_ptr<Image> PfmDecoder::Decode(const std::string &file) {
+std::unique_ptr<Image<float>> PfmDecoder::Decode(const std::string &file) {
     std::unique_ptr<FILE, std::function<void(FILE *)>> in(fopen(file.c_str(), "rb"),
             [](FILE *f) { fclose(f); });
 
@@ -49,7 +49,7 @@ std::unique_ptr<Image> PfmDecoder::Decode(const std::string &file) {
         return nullptr;
     }
 
-    std::unique_ptr<Image> img(new Image(width, height));
+    std::unique_ptr<Image<float>> img(new Image<float>(width, height));
     size_t n = width * height * 3;
     if (fread(img->mData.get(), sizeof(float), n, in.get()) != n) {
         fprintf(stderr, "file %s is broken", file.c_str());
@@ -73,7 +73,7 @@ std::unique_ptr<Image> PfmDecoder::Decode(const std::string &file) {
     return img;
 }
 
-std::unique_ptr<Image> ImageLoader::LoadImage(const std::string &file) {
+std::unique_ptr<Image<float>> ImageLoader::LoadImage(const std::string &file) {
     const DecoderBuilderListType &builderList = GetDecoderBuilderList();
 
     // TODO: sort by scores

@@ -8,12 +8,12 @@ namespace hdr2sdr {
 class ToneMapper {
 public:
     virtual ~ToneMapper() = default;
-    virtual std::shared_ptr<Image> Map(std::shared_ptr<Image> img, bool inPlace = true) = 0;
+    virtual std::shared_ptr<Image<float>> Map(std::shared_ptr<Image<float>> img, bool inPlace = true) = 0;
 };
 
 class HableMapper : public ToneMapper {
 public:
-    std::shared_ptr<Image> Map(std::shared_ptr<Image> img, bool inPlace = true) override;
+    std::shared_ptr<Image<float>> Map(std::shared_ptr<Image<float>> img, bool inPlace = true) override;
 };
 
 } // namespace hdr2sdr

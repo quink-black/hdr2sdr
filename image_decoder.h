@@ -23,7 +23,7 @@ public:
     };
 
     virtual ~ImageDecoder() = default;
-    virtual std::unique_ptr<Image> Decode(const std::string &file) = 0;
+    virtual std::unique_ptr<Image<float>> Decode(const std::string &file) = 0;
 };
 
 class ImageLoader {
@@ -32,7 +32,7 @@ public:
     ~ImageLoader() = delete;
 
     using DecoderBuilderListType = std::vector<std::shared_ptr<ImageDecoder::DecoderBuilder>>;
-    static std::unique_ptr<Image> LoadImage(const std::string &file);
+    static std::unique_ptr<Image<float>> LoadImage(const std::string &file);
 
 private:
     static const DecoderBuilderListType &GetDecoderBuilderList();

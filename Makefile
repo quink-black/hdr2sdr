@@ -4,9 +4,12 @@ LDFLAGS :=
 
 BUILD_DIR := build
 OBJ := $(BUILD_DIR)/image_decoder.o \
+	$(BUILD_DIR)/image_encoder.o \
 	$(BUILD_DIR)/tonemapper.o \
 
 HEADER := image.h \
+	image_decoder.h \
+	image_encoder.h \
 	stb_image.h \
 	stb_image_write.h \
 	tonemapper.h

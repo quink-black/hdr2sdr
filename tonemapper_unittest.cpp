@@ -1,13 +1,11 @@
 #include "tonemapper.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits>
 
 #include "image_decoder.h"
-
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#include "image_encoder.h"
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -28,15 +26,11 @@ int main(int argc, char *argv[]) {
     auto img = tonemapper.Map(std::move(imgIn));
 
     size_t n = img->mWidth * img->mHeight * img->mChannel;
-    using dataType = uint8_t;
-    std::vector<dataType> data(n);
-    int lowerLimit = std::numeric_limits<dataType>::min();
-    int upperLimit = std::numeric_limits<dataType>::max();
     const double gamma = 1.0 / 2.2;
     for (size_t i = 0; i < n; i++) {
-        int tmp = pow(img->mData[i], gamma) * upperLimit;
-        data[i] = std::min(std::max(tmp, lowerLimit), upperLimit);
+        img->mData[i] = pow(img->mData[i], gamma);
     }
-    stbi_write_png("tonemap.png", img->mWidth, img->mHeight, img->mChannel, data.data(), img->mWidth * img->mChannel);
+    hdr2sdr::ImageStore::StoreImage("tonemap.png", hdr2sdr::ImageFormat::PngImage, std::move(img));
+
     return 0;
 }
