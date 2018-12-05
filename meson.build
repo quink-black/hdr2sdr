@@ -4,6 +4,8 @@ project('hdr2sdr', 'c', 'cpp',
 src = files('image.cpp',
 	'image_decoder.cpp',
 	'image_encoder.cpp',
+	'pfm_decoder.cpp',
+	'openexr_decoder.cpp',
 	'tonemapper.cpp')
 
 include_dir = include_directories('third-party/install/include')

@@ -14,7 +14,8 @@ int main(int argc, char *argv[]) {
     }
 
     std::string file(argv[1]);
-    auto imgIn = quink::ImageLoader::LoadImage(file);
+    auto imgWrapper = quink::ImageLoader::LoadImage(file);
+    auto imgIn = imgWrapper.GetImg<float>();
     if (imgIn == nullptr) {
         fprintf(stderr, "load %s failed\n", file.c_str());
         return 1;

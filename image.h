@@ -1,5 +1,4 @@
-#ifndef HDR2SDR_IMAGE_H
-#define HDR2SDR_IMAGE_H
+#pragma once
 
 #include <memory>
 
@@ -31,9 +30,28 @@ public:
         DataTypeUInt16,
     };
 
+    ImageWrapper() { }
     ImageWrapper(std::shared_ptr<Image<float>> img) : mImgFloat(img) { }
     ImageWrapper(std::shared_ptr<Image<uint8_t>> img) : mImgUInt8(img) { }
     ImageWrapper(std::shared_ptr<Image<uint16_t>> img) : mImgUInt16(img) { }
+
+    void Reset(std::shared_ptr<Image<float>> img) {
+        mImgFloat = img;
+        mImgUInt8 = nullptr;
+        mImgUInt16 = nullptr;
+    }
+
+    void Reset(std::shared_ptr<Image<uint8_t>> img) {
+        mImgFloat = nullptr;
+        mImgUInt8 = img;
+        mImgUInt16 = nullptr;
+    }
+
+    void Reset(std::shared_ptr<Image<uint16_t>> img) {
+        mImgFloat = nullptr;
+        mImgUInt8 = nullptr;
+        mImgUInt16 = img;
+    }
 
     ImageDataType GetDataType();
 
@@ -64,5 +82,3 @@ enum class ImageFormat {
 };
 
 } // namespace quink
-
-#endif

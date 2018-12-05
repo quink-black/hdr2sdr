@@ -1,5 +1,4 @@
-#ifndef HDR2SDR_IMAGE_ENCODER_H
-#define HDR2SDR_IMAGE_ENCODER_H
+#pragma once
 
 #include <setjmp.h>
 #include <map>
@@ -110,5 +109,3 @@ public:
 };
 
 } // namespace quink
-
-#endif

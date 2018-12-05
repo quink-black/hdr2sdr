@@ -12,7 +12,8 @@ int main(int argc, char *argv[]) {
     }
 
     std::string file(argv[1]);
-    std::shared_ptr<quink::Image<float>> img = quink::ImageLoader::LoadImage(file);
+    auto imgWrapper = quink::ImageLoader::LoadImage(file);
+    std::shared_ptr<quink::Image<float>> img = imgWrapper.GetImg<float>();
     if (img == nullptr) {
         fprintf(stderr, "load %s failed\n", file.c_str());
         return 1;

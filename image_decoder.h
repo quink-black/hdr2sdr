@@ -1,5 +1,4 @@
-#ifndef HDR2SDR_IMAGE_DECODER_H
-#define HDR2SDR_IMAGE_DECODER_H
+#pragma once
 
 #include <memory>
 #include <string>
@@ -23,7 +22,7 @@ public:
     };
 
     virtual ~ImageDecoder() = default;
-    virtual std::unique_ptr<Image<float>> Decode(const std::string &file) = 0;
+    virtual ImageWrapper Decode(const std::string &file) = 0;
 };
 
 class ImageLoader {
@@ -31,7 +30,7 @@ public:
     ImageLoader() = delete;
     ~ImageLoader() = delete;
 
-    static std::unique_ptr<Image<float>> LoadImage(const std::string &file);
+    static ImageWrapper LoadImage(const std::string &file);
 
 private:
     using DecoderCreatorListType =
@@ -40,5 +39,3 @@ private:
 };
 
 } // namespace quink
-
-#endif
