@@ -17,6 +17,9 @@ struct Image {
     Image(int width, int height) :
         mWidth(width), mHeight(height), mData(new T[width * height * mChannel]) { }
 
+    int DataLength() const {
+        return mWidth * mHeight * mChannel;
+    }
 };
 
 enum class ImageFormat {

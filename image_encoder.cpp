@@ -101,4 +101,43 @@ error:
     return -1;
 }
 
+PairEncoder::PairEncoder(std::shared_ptr<ImageEncoder> enc) : mEncoder(enc) { }
+
+int PairEncoder::EncodeFloat(const std::string &file, std::shared_ptr<Image<float>> img) {
+    auto imgHigh = std::make_shared<Image<uint8_t>>(img->mWidth, img->mHeight);
+    auto imgLow = std::make_shared<Image<uint8_t>>(img->mWidth, img->mHeight);
+
+    for (int i = 0; i < img->DataLength(); i += 3) {
+        /*
+        uint16_t r = static_cast<uint16_t>(std::min<int>(img->mData[i + 0] * 255,
+                    std::numeric_limits<uint16_t>::max()));
+                    */
+        float r = img->mData[i + 0];
+        float g = img->mData[i + 1];
+        float b = img->mData[i + 2];
+        // BT.709
+        float luminance = 0.212671 * r + 0.71516 * g + 0.072169 * b;
+        float rLow = r / (1.0 + luminance);
+        float gLow = g / (1.0 + luminance);
+        float bLow = b / (1.0 + luminance);
+
+        imgLow->mData[i + 0] = rLow * 255;
+        imgLow->mData[i + 1] = gLow * 255;
+        imgLow->mData[i + 2] = bLow * 255;
+        imgHigh->mData[i + 0] = std::min<float>(r - rLow, 255);
+        imgHigh->mData[i + 1] = std::min<float>(g - gLow, 255);
+        imgHigh->mData[i + 2] = std::min<float>(b - bLow, 255);
+    }
+
+    int ret = mEncoder->EncodeInt8(file + "-1" + GetDefaultSuffix(), imgLow);
+    if (ret)
+        return ret;
+    ret = mEncoder->EncodeInt8(file + "-2" + GetDefaultSuffix(), imgHigh);
+    return ret;
+}
+
+std::string PairEncoder::GetDefaultSuffix() {
+    return mEncoder->GetDefaultSuffix();
+}
+
 } // namespace hdr2sdr

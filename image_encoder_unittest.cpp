@@ -26,12 +26,14 @@ int main(int argc, char *argv[]) {
         img->mData[i] = pow(img->mData[i], gamma);
     }
 
-    auto encs = hdr2sdr::ImageStore::GetEncoders();
-    for (size_t i = 0; i < encs.size(); i++) {
-        std::string name = std::to_string(i) + encs[i]->GetDefaultSuffix();
-        printf("Encode %s...\n", name.c_str());
-        encs[i]->EncodeFloat(name, img);
-        printf("Encode %s finished\n", name.c_str());
+    if (1) {
+        auto encs = hdr2sdr::ImageStore::GetEncoders();
+        for (size_t i = 0; i < encs.size(); i++) {
+            std::string name = std::to_string(i) + encs[i]->GetDefaultSuffix();
+            printf("Encode %s...\n", name.c_str());
+            encs[i]->EncodeFloat(name, img);
+            printf("Encode %s finished\n", name.c_str());
+        }
     }
 
     if (0) {
@@ -44,6 +46,14 @@ int main(int argc, char *argv[]) {
             jpg.EncodeFloat(name, img);
             printf("Encode %s finished\n", name.c_str());
         }
+    }
+
+    if (1) {
+        std::shared_ptr<hdr2sdr::ImageEncoder> jpgEnc(new hdr2sdr::JpegEncoder(90));
+        hdr2sdr::PairEncoder enc(jpgEnc);
+        printf("Encode image pair...\n");
+        enc.EncodeFloat("pair", img);
+        printf("Encode image pair finished\n");
     }
 
     return 0;

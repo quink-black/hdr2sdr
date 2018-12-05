@@ -51,6 +51,17 @@ private:
     jmp_buf mJmpBuffer;
 };
 
+class PairEncoder : public ImageEncoder {
+public:
+    PairEncoder(std::shared_ptr<ImageEncoder> enc);
+
+    int EncodeFloat(const std::string &file, std::shared_ptr<Image<float>> img) override;
+    std::string GetDefaultSuffix() override;
+
+private:
+    std::shared_ptr<ImageEncoder> mEncoder;
+};
+
 class ImageStore {
 public:
     ImageStore() = delete;
