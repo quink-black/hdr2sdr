@@ -1,7 +1,8 @@
 project('hdr2sdr', 'c', 'cpp',
 	default_options : ['c_std=c11', 'cpp_std=c++11'])
 
-src = files('image_decoder.cpp',
+src = files('image.cpp',
+	'image_decoder.cpp',
 	'image_encoder.cpp',
 	'tonemapper.cpp')
 

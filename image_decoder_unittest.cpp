@@ -26,7 +26,17 @@ int main(int argc, char *argv[]) {
         img->mData[i] = pow(img->mData[i], gamma);
     }
 
-    hdr2sdr::ImageStore::StoreImage("decode.png", hdr2sdr::ImageFormat::PngImage, img);
+    std::string name("decode-float.png");
+    printf("store as %s\n", name.c_str());
+    hdr2sdr::ImageStore::StoreImage(name, hdr2sdr::ImageFormat::PngImage, img);
+
+    hdr2sdr::ImageWrapper imgWrapper(img);
+    printf("data type %d\n", imgWrapper.GetDataType());
+
+    name = "decode-uint8_t.png";
+    printf("store as %s\n", name.c_str());
+    auto img2 = imgWrapper.GetImg<uint8_t>();
+    hdr2sdr::ImageStore::StoreImage(name, hdr2sdr::ImageFormat::PngImage, img2);
 
     return 0;
 }
