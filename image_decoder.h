@@ -11,9 +11,9 @@ namespace hdr2sdr {
 
 class ImageDecoder {
 public:
-    class DecoderBuilder {
+    class DecoderCreator {
     public:
-        virtual ~DecoderBuilder() = default;
+        virtual ~DecoderCreator() = default;
 
         static const int SCORE_UNSUPPORT = 0;
         static const int SCORE_DEFINITELY = 100;
@@ -31,11 +31,12 @@ public:
     ImageLoader() = delete;
     ~ImageLoader() = delete;
 
-    using DecoderBuilderListType = std::vector<std::shared_ptr<ImageDecoder::DecoderBuilder>>;
     static std::unique_ptr<Image<float>> LoadImage(const std::string &file);
 
 private:
-    static const DecoderBuilderListType &GetDecoderBuilderList();
+    using DecoderCreatorListType =
+        std::vector<std::shared_ptr<ImageDecoder::DecoderCreator>>;
+    static const DecoderCreatorListType &GetDecoderCreatorList();
 };
 
 } // namespace hdr2sdr

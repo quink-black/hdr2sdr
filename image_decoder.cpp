@@ -6,7 +6,7 @@ namespace hdr2sdr {
 
 class PfmDecoder : public ImageDecoder {
 public:
-    class PfmDecoderBuilder : public DecoderBuilder {
+    class PfmDecoderCreator : public DecoderCreator {
     public:
         int Probe(const std::string &file) const override;
         std::unique_ptr<ImageDecoder> Create() const override;
@@ -15,7 +15,7 @@ public:
     std::unique_ptr<Image<float>> Decode(const std::string &file) override;
 };
 
-int PfmDecoder::PfmDecoderBuilder::Probe(const std::string &file) const {
+int PfmDecoder::PfmDecoderCreator::Probe(const std::string &file) const {
     auto suffix_pos = file.rfind(".");
     if (suffix_pos != std::string::npos) {
         std::string suffix = file.substr(suffix_pos);
@@ -26,7 +26,7 @@ int PfmDecoder::PfmDecoderBuilder::Probe(const std::string &file) const {
     return SCORE_UNSUPPORT;
 }
 
-std::unique_ptr<ImageDecoder> PfmDecoder::PfmDecoderBuilder::Create() const {
+std::unique_ptr<ImageDecoder> PfmDecoder::PfmDecoderCreator::Create() const {
     return std::unique_ptr<ImageDecoder>(new PfmDecoder());
 }
 
@@ -74,25 +74,25 @@ std::unique_ptr<Image<float>> PfmDecoder::Decode(const std::string &file) {
 }
 
 std::unique_ptr<Image<float>> ImageLoader::LoadImage(const std::string &file) {
-    const DecoderBuilderListType &builderList = GetDecoderBuilderList();
+    const DecoderCreatorListType &CreatorList = GetDecoderCreatorList();
 
     // TODO: sort by scores
-    for (const auto &builder : builderList) {
-        int n = builder->Probe(file);
-        if (n == ImageDecoder::DecoderBuilder::SCORE_DEFINITELY) {
-            auto decoder = builder->Create();
+    for (const auto &Creator : CreatorList) {
+        int n = Creator->Probe(file);
+        if (n == ImageDecoder::DecoderCreator::SCORE_DEFINITELY) {
+            auto decoder = Creator->Create();
             return decoder->Decode(file);
         }
     }
     return nullptr;
 }
 
-const ImageLoader::DecoderBuilderListType &ImageLoader::GetDecoderBuilderList() {
-    static DecoderBuilderListType builderList{
-        std::shared_ptr<ImageDecoder::DecoderBuilder>(new PfmDecoder::PfmDecoderBuilder)
+const ImageLoader::DecoderCreatorListType &ImageLoader::GetDecoderCreatorList() {
+    static DecoderCreatorListType CreatorList{
+        std::shared_ptr<ImageDecoder::DecoderCreator>(new PfmDecoder::PfmDecoderCreator)
     };
 
-    return builderList;
+    return CreatorList;
 }
 
 }
