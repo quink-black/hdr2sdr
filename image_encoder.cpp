@@ -7,7 +7,7 @@
 #include "stb_image_write.h"
 #undef STB_IMAGE_WRITE_IMPLEMENTATION
 
-namespace hdr2sdr {
+namespace quink {
 
 int ImageEncoder::EncodeFloat(const std::string &file, std::shared_ptr<Image<float>> imgIn) {
     std::shared_ptr<Image<uint8_t>> img = std::make_shared<Image<uint8_t>>(imgIn->mWidth, imgIn->mHeight);;
@@ -140,4 +140,4 @@ std::string PairEncoder::GetDefaultSuffix() {
     return mEncoder->GetDefaultSuffix();
 }
 
-} // namespace hdr2sdr
+} // namespace quink

@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     }
 
     std::string file(argv[1]);
-    std::shared_ptr<hdr2sdr::Image<float>> img = hdr2sdr::ImageLoader::LoadImage(file);
+    std::shared_ptr<quink::Image<float>> img = quink::ImageLoader::LoadImage(file);
     if (img == nullptr) {
         fprintf(stderr, "load %s failed\n", file.c_str());
         return 1;
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (1) {
-        auto encs = hdr2sdr::ImageStore::GetEncoders();
+        auto encs = quink::ImageStore::GetEncoders();
         for (size_t i = 0; i < encs.size(); i++) {
             std::string name = std::to_string(i) + encs[i]->GetDefaultSuffix();
             printf("Encode %s...\n", name.c_str());
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (0) {
-        hdr2sdr::JpegEncoder jpg;
+        quink::JpegEncoder jpg;
         for (int i = 20; i <= 100; i += 20) {
             std::string name = std::string("jpeg-") + std::to_string(i) + jpg.GetDefaultSuffix();
             jpg.SetInt("quality", i);
@@ -49,8 +49,8 @@ int main(int argc, char *argv[]) {
     }
 
     if (1) {
-        std::shared_ptr<hdr2sdr::ImageEncoder> jpgEnc(new hdr2sdr::JpegEncoder(90));
-        hdr2sdr::PairEncoder enc(jpgEnc);
+        std::shared_ptr<quink::ImageEncoder> jpgEnc(new quink::JpegEncoder(90));
+        quink::PairEncoder enc(jpgEnc);
         printf("Encode image pair...\n");
         enc.EncodeFloat("pair", img);
         printf("Encode image pair finished\n");

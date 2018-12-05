@@ -3,7 +3,7 @@
 
 #include <memory>
 
-namespace hdr2sdr {
+namespace quink {
 
 template <typename T>
 struct Image {
@@ -63,6 +63,6 @@ enum class ImageFormat {
     JpegImage,
 };
 
-} // namespace hdr2sdr
+} // namespace quink
 
 #endif

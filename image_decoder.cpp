@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-namespace hdr2sdr {
+namespace quink {
 
 class PfmDecoder : public ImageDecoder {
 public:

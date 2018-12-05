@@ -9,7 +9,7 @@
 #include "image.h"
 #include <jpeglib.h>
 
-namespace hdr2sdr {
+namespace quink {
 
 class ImageEncoder {
 public:
@@ -109,6 +109,6 @@ public:
     }
 };
 
-} // namespace hdr2sdr
+} // namespace quink
 
 #endif

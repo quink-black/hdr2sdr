@@ -7,7 +7,7 @@
 
 #include "image.h"
 
-namespace hdr2sdr {
+namespace quink {
 
 class ImageDecoder {
 public:
@@ -39,6 +39,6 @@ private:
     static const DecoderCreatorListType &GetDecoderCreatorList();
 };
 
-} // namespace hdr2sdr
+} // namespace quink
 
 #endif

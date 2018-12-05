@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     }
 
     std::string file(argv[1]);
-    auto imgIn = hdr2sdr::ImageLoader::LoadImage(file);
+    auto imgIn = quink::ImageLoader::LoadImage(file);
     if (imgIn == nullptr) {
         fprintf(stderr, "load %s failed\n", file.c_str());
         return 1;
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
         fprintf(stdout, "load %s success\n", file.c_str());
     }
 
-    hdr2sdr::HableMapper tonemapper;
+    quink::HableMapper tonemapper;
     auto img = tonemapper.Map(std::move(imgIn));
 
     size_t n = img->mWidth * img->mHeight * img->mChannel;
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     for (size_t i = 0; i < n; i++) {
         img->mData[i] = pow(img->mData[i], gamma);
     }
-    hdr2sdr::ImageStore::StoreImage("tonemap.png", hdr2sdr::ImageFormat::PngImage, std::move(img));
+    quink::ImageStore::StoreImage("tonemap.png", quink::ImageFormat::PngImage, std::move(img));
 
     return 0;
 }

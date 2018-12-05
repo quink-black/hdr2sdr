@@ -1,6 +1,6 @@
 #include "image.h"
 
-namespace hdr2sdr {
+namespace quink {
 
 ImageWrapper::ImageDataType ImageWrapper::GetDataType() {
     if (mImgFloat)

@@ -3,7 +3,7 @@
 
 #include "image.h"
 
-namespace hdr2sdr {
+namespace quink {
 
 class ToneMapper {
 public:
@@ -16,6 +16,6 @@ public:
     std::shared_ptr<Image<float>> Map(std::shared_ptr<Image<float>> img, bool inPlace = true) override;
 };
 
-} // namespace hdr2sdr
+} // namespace quink
 
 #endif

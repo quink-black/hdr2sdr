@@ -1,6 +1,6 @@
 #include "tonemapper.h"
 
-namespace hdr2sdr {
+namespace quink {
 
 std::shared_ptr<Image<float>> HableMapper::Map(std::shared_ptr<Image<float>> img, bool inPlace) {
     auto hable = [](float in) {
@@ -28,4 +28,4 @@ std::shared_ptr<Image<float>> HableMapper::Map(std::shared_ptr<Image<float>> img
     return out;
 }
 
-} // namespace hdr2sdr
+} // namespace quink
