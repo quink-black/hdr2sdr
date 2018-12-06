@@ -52,7 +52,6 @@ ImageWrapper OpenEXRDecoder::Decode(const std::string &file) {
     const char *errMsg = nullptr;
     int num_channels;
     int idxR = -1, idxG = -1, idxB = -1;
-    size_t pixels;
 
     InitEXRImage(&img);
     InitEXRHeader(&header);
@@ -102,7 +101,6 @@ ImageWrapper OpenEXRDecoder::Decode(const std::string &file) {
         goto out;
     }
 
-    pixels = imgOut->DataLength();
     for (int i = 0; i < imgOut->mHeight; ++i) {
         for (int j = 0; j < imgOut->mWidth; ++j) {
             int index = i * imgOut->mWidth + j;

@@ -3,6 +3,7 @@
 #include <limits>
 #include <vector>
 
+#include "log.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 #undef STB_IMAGE_WRITE_IMPLEMENTATION
@@ -22,17 +23,8 @@ int ImageEncoder::EncodeFloat(const std::string &file, std::shared_ptr<Image<flo
     return EncodeInt8(file, img);
 }
 
-int ImageEncoder::SetInt(const std::string &key, int value) {
-    auto search = ParamsInt.find(key);
-    if (search == ParamsInt.end())
-        return -1;
-    *search->second = value;
-    return 0;
-}
-
-void ImageEncoder::RegisterInt(const std::string &key, int *p) {
-    assert(ParamsInt.find(key) == ParamsInt.end());
-    ParamsInt[key] = p;
+bool ImageEncoder::SetInt(const std::string &key, int value) {
+    return mConfig.SetInt(key, value);
 }
 
 int PngEncoder::EncodeInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) {
@@ -41,7 +33,16 @@ int PngEncoder::EncodeInt8(const std::string &file, std::shared_ptr<Image<uint8_
 }
 
 JpegEncoder::JpegEncoder(int quality) : mQuality(quality) {
-    RegisterInt("quality", &mQuality);
+    mConfig.RegisterInt("quality", [this](int n)
+            {
+                if (n <= 0 || n > 100) {
+                    ALOGD("set quality to %d is invalid", n);
+                    return false;
+                }
+                mQuality = n;
+                ALOGD("set quality to %d", n);
+                return true;
+            });
 }
 
 void JpegEncoder::JpegErrorExit(j_common_ptr jpeg) {
@@ -54,7 +55,7 @@ void JpegEncoder::JpegErrorExit(j_common_ptr jpeg) {
 void JpegEncoder::JpegErrorMessage(j_common_ptr jpeg) {
     char errMsg[JMSG_LENGTH_MAX];
     jpeg->err->format_message(jpeg, errMsg);
-    fprintf(stderr, "%s: %s\n", __func__, errMsg);
+    ALOGE("%s: %s", __func__, errMsg);
 }
 
 int JpegEncoder::EncodeInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) {

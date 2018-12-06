@@ -7,6 +7,7 @@
 
 #include "image.h"
 #include <jpeglib.h>
+#include "params.h"
 
 namespace quink {
 
@@ -18,13 +19,10 @@ public:
 
     virtual std::string GetDefaultSuffix() { return std::string(); }
 
-    int SetInt(const std::string &key, int value);
+    bool SetInt(const std::string &key, int value);
 
 protected:
-    void RegisterInt(const std::string &key, int *p);
-
-private:
-    std::map<std::string, int*> ParamsInt;
+    Params mConfig;
 };
 
 class PngEncoder : public ImageEncoder {

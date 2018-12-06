@@ -4,6 +4,7 @@ project('hdr2sdr', 'c', 'cpp',
 src = files('image.cpp',
 	'image_decoder.cpp',
 	'image_encoder.cpp',
+	'params.cpp',
 	'pfm_decoder.cpp',
 	'openexr_decoder.cpp',
 	'tonemapper.cpp')
