@@ -1,5 +1,4 @@
-#ifndef TONEMAP_LOG_H
-#define TONEMAP_LOG_H
+#pragma once
 
 #ifdef __ANDROID__
 #   include <android/log.h>
@@ -12,6 +11,4 @@
 #   include <stdlib.h>
 #   define ALOGE(fmt, ...)   printf(fmt "\n", ##__VA_ARGS__)
 #   define ALOGD(fmt, ...)   printf(fmt "\n", ##__VA_ARGS__)
-#endif
-
 #endif

@@ -1,5 +1,7 @@
 #include "pfm_decoder.h"
+
 #include <algorithm>
+#include <functional>
 
 namespace quink {
 int PfmDecoder::Creator::Probe(const std::string &file) const {
