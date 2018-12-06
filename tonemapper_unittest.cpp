@@ -25,12 +25,6 @@ int main(int argc, char *argv[]) {
 
     quink::HableMapper tonemapper;
     auto img = tonemapper.Map(std::move(imgIn));
-
-    size_t n = img->mWidth * img->mHeight * img->mChannel;
-    const double gamma = 1.0 / 2.2;
-    for (size_t i = 0; i < n; i++) {
-        img->mData[i] = pow(img->mData[i], gamma);
-    }
     quink::ImageStore::StoreImage("tonemap.png", quink::ImageFormat::PngImage, std::move(img));
 
     return 0;

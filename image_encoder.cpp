@@ -20,14 +20,14 @@ int ImageEncoder::EncodeFloat(const std::string &file, std::shared_ptr<Image<flo
         int tmp = imgIn->mData[i] * upperLimit;
         img->mData[i] = std::min(std::max(tmp, lowerLimit), upperLimit);
     }
-    return EncodeInt8(file, img);
+    return EncodeUInt8(file, img);
 }
 
 bool ImageEncoder::SetInt(const std::string &key, int value) {
     return mConfig.SetInt(key, value);
 }
 
-int PngEncoder::EncodeInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) {
+int PngEncoder::EncodeUInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) {
     int ret = stbi_write_png(file.c_str(), img->mWidth, img->mHeight, img->mChannel, img->mData.get(), img->mWidth * img->mChannel);
     return ret;
 }
@@ -58,7 +58,7 @@ void JpegEncoder::JpegErrorMessage(j_common_ptr jpeg) {
     ALOGE("%s: %s", __func__, errMsg);
 }
 
-int JpegEncoder::EncodeInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) {
+int JpegEncoder::EncodeUInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) {
     FILE *out = fopen(file.c_str(), "wb");
     if (!out)
         return -1;
@@ -108,11 +108,8 @@ int PairEncoder::EncodeFloat(const std::string &file, std::shared_ptr<Image<floa
     auto imgHigh = std::make_shared<Image<uint8_t>>(img->mWidth, img->mHeight);
     auto imgLow = std::make_shared<Image<uint8_t>>(img->mWidth, img->mHeight);
 
+    img->GammaCorrect(2.2f);
     for (int i = 0; i < img->DataLength(); i += 3) {
-        /*
-        uint16_t r = static_cast<uint16_t>(std::min<int>(img->mData[i + 0] * 255,
-                    std::numeric_limits<uint16_t>::max()));
-                    */
         float r = img->mData[i + 0];
         float g = img->mData[i + 1];
         float b = img->mData[i + 2];
@@ -122,18 +119,18 @@ int PairEncoder::EncodeFloat(const std::string &file, std::shared_ptr<Image<floa
         float gLow = g / (1.0 + luminance);
         float bLow = b / (1.0 + luminance);
 
-        imgLow->mData[i + 0] = rLow * 255;
-        imgLow->mData[i + 1] = gLow * 255;
-        imgLow->mData[i + 2] = bLow * 255;
+        imgLow->mData[i + 0] = std::min<float>(rLow * 255, 255);
+        imgLow->mData[i + 1] = std::min<float>(gLow * 255, 255);
+        imgLow->mData[i + 2] = std::min<float>(bLow * 255, 255);
         imgHigh->mData[i + 0] = std::min<float>(r - rLow, 255);
         imgHigh->mData[i + 1] = std::min<float>(g - gLow, 255);
         imgHigh->mData[i + 2] = std::min<float>(b - bLow, 255);
     }
 
-    int ret = mEncoder->EncodeInt8(file + "-1" + GetDefaultSuffix(), imgLow);
+    int ret = mEncoder->EncodeUInt8(file + "-1" + GetDefaultSuffix(), imgLow);
     if (ret)
         return ret;
-    ret = mEncoder->EncodeInt8(file + "-2" + GetDefaultSuffix(), imgHigh);
+    ret = mEncoder->EncodeUInt8(file + "-2" + GetDefaultSuffix(), imgHigh);
     return ret;
 }
 

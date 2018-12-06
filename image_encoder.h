@@ -15,7 +15,7 @@ class ImageEncoder {
 public:
     virtual ~ImageEncoder() = default;
     virtual int EncodeFloat(const std::string &file, std::shared_ptr<Image<float>> img);
-    virtual int EncodeInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) { return -1; }
+    virtual int EncodeUInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) { return -1; }
 
     virtual std::string GetDefaultSuffix() { return std::string(); }
 
@@ -27,7 +27,7 @@ protected:
 
 class PngEncoder : public ImageEncoder {
 public:
-    int EncodeInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) override;
+    int EncodeUInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) override;
 
     std::string GetDefaultSuffix() override { return ".png"; }
 };
@@ -36,7 +36,7 @@ class JpegEncoder : public ImageEncoder {
 public:
     JpegEncoder(int quality = 95);
 
-    int EncodeInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) override;
+    int EncodeUInt8(const std::string &file, std::shared_ptr<Image<uint8_t>> img) override;
     std::string GetDefaultSuffix() override { return ".jpg"; }
 
 private:
@@ -76,7 +76,7 @@ public:
     static int StoreImage(const std::string &file, ImageFormat format, std::shared_ptr<Image<uint8_t>> img) {
         std::unique_ptr<ImageEncoder> enc = GetEncoder(format);
         if (enc) {
-            return enc->EncodeInt8(file, img);
+            return enc->EncodeUInt8(file, img);
         } else {
             return -1;
         }

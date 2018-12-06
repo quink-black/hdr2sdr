@@ -20,23 +20,23 @@ int main(int argc, char *argv[]) {
         fprintf(stdout, "load %s success\n", file.c_str());
     }
 
-    std::shared_ptr<quink::Image<float>> img = imgWrapper.GetImg<float>();
+    {
+        std::string name("decode-float.png");
+        printf("store as %s\n", name.c_str());
 
-    size_t n = img->mWidth * img->mHeight * img->mChannel;
-    const double gamma = 1.0 / 2.2 * img->mGamma;
-    fprintf(stdout, "gamma %f\n", gamma);
-    for (size_t i = 0; i < n; i++) {
-        img->mData[i] = pow(img->mData[i], gamma);
+        auto img = imgWrapper.GetImg<float>();
+        img->GammaCorrect(2.2f);
+        quink::ImageStore::StoreImage(name, quink::ImageFormat::PngImage, img);
     }
 
-    std::string name("decode-float.png");
-    printf("store as %s\n", name.c_str());
-    quink::ImageStore::StoreImage(name, quink::ImageFormat::PngImage, img);
+    {
+        std::string name = "decode-uint8_t.png";
+        printf("store as %s\n", name.c_str());
 
-    name = "decode-uint8_t.png";
-    printf("store as %s\n", name.c_str());
-    auto img2 = imgWrapper.GetImg<uint8_t>();
-    quink::ImageStore::StoreImage(name, quink::ImageFormat::PngImage, img2);
+        auto img = imgWrapper.GetImg<uint8_t>();
+        img->GammaCorrect(2.2f);
+        quink::ImageStore::StoreImage(name, quink::ImageFormat::PngImage, img);
+    }
 
     return 0;
 }

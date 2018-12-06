@@ -1,5 +1,7 @@
 #pragma once
 
+#include <math.h>
+#include <limits>
 #include <memory>
 
 namespace quink {
@@ -20,6 +22,34 @@ struct Image {
 
     int DataLength() const {
         return mWidth * mHeight * mChannel;
+    }
+
+    void GammaCorrect(float gamma) {
+        GammaCorrectImpl(gamma, std::is_floating_point<T>());
+    }
+
+private:
+    void GammaCorrectImpl(float gamma, std::true_type isFloat) {
+        if (mGamma != gamma && mData != nullptr) {
+            float f = 1.0 / gamma * mGamma;
+            int n = DataLength();
+            for (int i = 0; i < n; i++) {
+                mData[i] = powf(mData[i], f);
+            }
+        }
+        mGamma = gamma;
+    }
+
+    void GammaCorrectImpl(float gamma, std::false_type isFloat) {
+        if (mGamma != gamma && mData != nullptr) {
+            float f = 1.0 / gamma * mGamma;
+            int n = DataLength();
+            for (int i = 0; i < n; i++) {
+                float tmp = powf(mData[i] / 255.0f, f);
+                mData[i] = std::min<float>(tmp * 255, std::numeric_limits<T>::max());
+            }
+        }
+        mGamma = gamma;
     }
 };
 

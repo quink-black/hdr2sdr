@@ -11,6 +11,7 @@ std::shared_ptr<Image<float>> HableMapper::Map(std::shared_ptr<Image<float>> img
     if (img == nullptr)
         return nullptr;
 
+    img->GammaCorrect(1.0f);
     std::shared_ptr<Image<float>> out;
     if (inPlace)
         out = img;
@@ -25,6 +26,7 @@ std::shared_ptr<Image<float>> HableMapper::Map(std::shared_ptr<Image<float>> img
         float color = curr * whiteScale;
         out->mData[i] = color;
     }
+    out->GammaCorrect(2.2f);
     return out;
 }
 
