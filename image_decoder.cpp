@@ -1,5 +1,6 @@
 #include "image_decoder.h"
 
+#include "hdr_decoder.h"
 #include "pfm_decoder.h"
 #include "openexr_decoder.h"
 
@@ -23,6 +24,7 @@ const ImageLoader::DecoderCreatorListType &ImageLoader::GetDecoderCreatorList() 
     static DecoderCreatorListType CreatorList{
         std::shared_ptr<ImageDecoder::DecoderCreator>(new PfmDecoder::Creator),
         std::shared_ptr<ImageDecoder::DecoderCreator>(new OpenEXRDecoder::Creator),
+        std::shared_ptr<ImageDecoder::DecoderCreator>(new HdrDecoder::Creator),
     };
 
     return CreatorList;
