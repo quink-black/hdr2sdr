@@ -109,22 +109,10 @@ int PairEncoder::EncodeFloat(const std::string &file, std::shared_ptr<Image<floa
     auto imgLow = std::make_shared<Image<uint8_t>>(img->mWidth, img->mHeight);
 
     img->GammaCorrect(2.2f);
-    for (int i = 0; i < img->DataLength(); i += 3) {
-        float r = img->mData[i + 0];
-        float g = img->mData[i + 1];
-        float b = img->mData[i + 2];
-        // BT.709
-        float luminance = 0.212671 * r + 0.71516 * g + 0.072169 * b;
-        float rLow = r / (1.0 + luminance);
-        float gLow = g / (1.0 + luminance);
-        float bLow = b / (1.0 + luminance);
-
-        imgLow->mData[i + 0] = std::min<float>(rLow * 255, 255);
-        imgLow->mData[i + 1] = std::min<float>(gLow * 255, 255);
-        imgLow->mData[i + 2] = std::min<float>(bLow * 255, 255);
-        imgHigh->mData[i + 0] = std::min<float>((r * 255 - imgLow->mData[i + 0]) * magic_numer / 255, 255);
-        imgHigh->mData[i + 1] = std::min<float>((g * 255 - imgLow->mData[i + 1]) * magic_numer / 255, 255);
-        imgHigh->mData[i + 2] = std::min<float>((b * 255 - imgLow->mData[i + 2]) * magic_numer / 255, 255);
+    for (int i = 0; i < img->DataLength(); i += 1) {
+        float f = img->mData[i] * 255;
+        imgLow->mData[i] = std::min<float>(f, 255);
+        imgHigh->mData[i] = std::min<float>((f - imgLow->mData[i]) * magic_numer / 255, 255);
     }
 
     int ret = mEncoder->EncodeUInt8(file + "-1" + GetDefaultSuffix(), imgLow);
