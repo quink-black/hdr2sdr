@@ -20,12 +20,12 @@ ImageWrapper LdrDecoder::Decode(const std::string &file) {
     ImageWrapper imgWrapper;
 
     int width = 0, height = 0, comp = 0;
-    uint8_t *data = stbi_load(file.c_str(), &width, &height, &comp, 0);
+    uint8_t *data = stbi_load(file.c_str(), &width, &height, &comp, 3);
     ALOGD("width %d, height %d, comp %d", width, height, comp);
     if (data == nullptr)
         return imgWrapper;
-    if (comp != 3) {
-        ALOGE("not support channel != 3");
+    if (comp < 3) {
+        ALOGE("not support channel < 3");
         free(data);
         return imgWrapper;
     }
@@ -33,6 +33,7 @@ ImageWrapper LdrDecoder::Decode(const std::string &file) {
     auto img = std::make_shared<Image<uint8_t>>();
     img->mWidth = width;
     img->mHeight = height;
+    img->mGamma = 2.2;
     img->mData.reset(data);
     imgWrapper.Reset(img);
     return imgWrapper;

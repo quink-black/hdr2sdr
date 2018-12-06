@@ -9,12 +9,14 @@ struct Image {
     const int mChannel = 3;
     int mWidth;
     int mHeight;
+    float mGamma;
     std::unique_ptr<T[]> mData;
 
-    Image() : mWidth(0), mHeight(0) { }
+    Image() : mWidth(0), mHeight(0), mGamma(1.0f) { }
 
-    Image(int width, int height) :
-        mWidth(width), mHeight(height), mData(new T[width * height * mChannel]) { }
+    Image(int width, int height, float gamma = 1.0f) :
+        mWidth(width), mHeight(height), mGamma(gamma),
+        mData(new T[width * height * mChannel]) { }
 
     int DataLength() const {
         return mWidth * mHeight * mChannel;
@@ -24,7 +26,6 @@ struct Image {
 class ImageWrapper {
 public:
     enum ImageDataType {
-        DataTypeEmpty,
         DataTypeFloat,
         DataTypeUInt8,
         DataTypeUInt16,
@@ -51,6 +52,12 @@ public:
         mImgFloat = nullptr;
         mImgUInt8 = nullptr;
         mImgUInt16 = img;
+    }
+
+    bool Empty() {
+        return (mImgFloat == nullptr &&
+                mImgUInt8 == nullptr &&
+                mImgUInt16 == nullptr);
     }
 
     ImageDataType GetDataType();

@@ -1,12 +1,16 @@
 project('hdr2sdr', 'c', 'cpp',
 	default_options : ['c_std=c11', 'cpp_std=c++11'])
 
-src = files('image.cpp',
+src = files(
+	'hdr_decoder.cpp',
+	'image.cpp',
 	'image_decoder.cpp',
 	'image_encoder.cpp',
+	'ldr_decoder.cpp',
 	'params.cpp',
 	'pfm_decoder.cpp',
 	'openexr_decoder.cpp',
+	'stb_image.c',
 	'tonemapper.cpp')
 
 include_dir = include_directories('third-party/install/include')

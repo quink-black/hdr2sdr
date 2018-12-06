@@ -13,17 +13,18 @@ int main(int argc, char *argv[]) {
 
     std::string file(argv[1]);
     auto imgWrapper = quink::ImageLoader::LoadImage(file);
-    std::shared_ptr<quink::Image<float>> img = imgWrapper.GetImg<float>();
-
-    if (img == nullptr) {
+    if (imgWrapper.Empty()) {
         fprintf(stderr, "load %s failed\n", file.c_str());
         return 1;
     } else {
         fprintf(stdout, "load %s success\n", file.c_str());
     }
 
+    std::shared_ptr<quink::Image<float>> img = imgWrapper.GetImg<float>();
+
     size_t n = img->mWidth * img->mHeight * img->mChannel;
-    const double gamma = 1.0 / 2.2;
+    const double gamma = 1.0 / 2.2 * img->mGamma;
+    fprintf(stdout, "gamma %f\n", gamma);
     for (size_t i = 0; i < n; i++) {
         img->mData[i] = pow(img->mData[i], gamma);
     }
