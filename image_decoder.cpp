@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include "log.h"
 #include "hdr_decoder.h"
 #include "ldr_decoder.h"
 #include "pfm_decoder.h"
@@ -14,13 +15,14 @@ ImageWrapper ImageLoader::LoadImage(const std::string &file) {
 
     using CreatorScorePair = std::pair<std::shared_ptr<ImageDecoder::DecoderCreator>, int>;
     std::vector<CreatorScorePair> creatorScore;
-    for (const auto &Creator : CreatorList) {
-        int n = Creator->Probe(file);
+    for (const auto &creator : CreatorList) {
+        int n = creator->Probe(file);
         if (n == ImageDecoder::DecoderCreator::SCORE_DEFINITELY) {
-            auto decoder = Creator->Create();
+            ALOGD("create %s", creator->GetDecoderName().c_str());
+            auto decoder = creator->Create();
             return decoder->Decode(file);
         } else if (n > ImageDecoder::DecoderCreator::SCORE_UNSUPPORT) {
-            creatorScore.push_back(CreatorScorePair(Creator, n));
+            creatorScore.push_back(CreatorScorePair(creator, n));
         }
     }
 
@@ -32,6 +34,7 @@ ImageWrapper ImageLoader::LoadImage(const std::string &file) {
             {
                 return a.second < b.second;
             });
+    ALOGD("create %s", creatorScore.back().first->GetDecoderName().c_str());
     auto decoder = creatorScore.back().first->Create();
     return decoder->Decode(file);
 }

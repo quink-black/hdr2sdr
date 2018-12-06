@@ -19,6 +19,7 @@ public:
         // return score, higher is better
         virtual int Probe(const std::string &file) const = 0;
         virtual std::unique_ptr<ImageDecoder> Create() const = 0;
+        virtual std::string GetDecoderName() const = 0;
     };
 
     virtual ~ImageDecoder() = default;
