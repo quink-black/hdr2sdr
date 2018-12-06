@@ -106,7 +106,6 @@ private:
 template <>
 std::shared_ptr<Image<float>> ImageWrapper::GetImg();
 
-
 template <>
 std::shared_ptr<Image<uint8_t>> ImageWrapper::GetImg();
 

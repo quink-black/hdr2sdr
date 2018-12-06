@@ -50,6 +50,7 @@ private:
 
 class PairEncoder : public ImageEncoder {
 public:
+    static const uint8_t magic_numer = 30;
     PairEncoder(std::shared_ptr<ImageEncoder> enc);
 
     int EncodeFloat(const std::string &file, std::shared_ptr<Image<float>> img) override;

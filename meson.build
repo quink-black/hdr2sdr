@@ -6,6 +6,7 @@ src = files(
 	'image.cpp',
 	'image_decoder.cpp',
 	'image_encoder.cpp',
+	'image_merge.cpp',
 	'ldr_decoder.cpp',
 	'params.cpp',
 	'pfm_decoder.cpp',
@@ -20,4 +21,5 @@ lib = shared_library('hdr2sdr', src, dependencies : [jpeg_dep])
 
 executable('image_decoder_unittest', 'image_decoder_unittest.cpp', link_with : lib)
 executable('image_encoder_unittest', 'image_encoder_unittest.cpp', link_with : lib)
+executable('image_merge_unittest', 'image_merge_unittest.cpp', link_with : lib)
 executable('tonemapper_unittest', 'tonemapper_unittest.cpp', link_with : lib)

@@ -122,9 +122,9 @@ int PairEncoder::EncodeFloat(const std::string &file, std::shared_ptr<Image<floa
         imgLow->mData[i + 0] = std::min<float>(rLow * 255, 255);
         imgLow->mData[i + 1] = std::min<float>(gLow * 255, 255);
         imgLow->mData[i + 2] = std::min<float>(bLow * 255, 255);
-        imgHigh->mData[i + 0] = std::min<float>(r - rLow, 255);
-        imgHigh->mData[i + 1] = std::min<float>(g - gLow, 255);
-        imgHigh->mData[i + 2] = std::min<float>(b - bLow, 255);
+        imgHigh->mData[i + 0] = std::min<float>((r - rLow) * magic_numer, 255);
+        imgHigh->mData[i + 1] = std::min<float>((g - gLow) * magic_numer, 255);
+        imgHigh->mData[i + 2] = std::min<float>((b - bLow) * magic_numer, 255);
     }
 
     int ret = mEncoder->EncodeUInt8(file + "-1" + GetDefaultSuffix(), imgLow);
