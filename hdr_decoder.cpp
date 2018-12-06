@@ -8,14 +8,10 @@
 namespace quink {
 
 int HdrDecoder::Creator::Probe(const std::string &file) const {
-    auto suffix_pos = file.rfind(".");
-    if (suffix_pos != std::string::npos) {
-        std::string suffix = file.substr(suffix_pos);
-        std::transform(suffix.begin(), suffix.end(), suffix.begin(), tolower);
-        if (suffix == ".hdr")
-            return SCORE_DEFINITELY;
-    }
-    return SCORE_UNSUPPORT;
+    if (stbi_is_hdr(file.c_str()))
+        return SCORE_DEFINITELY;
+    else
+        return SCORE_UNSUPPORT;
 }
 
 std::unique_ptr<ImageDecoder> HdrDecoder::Creator::Create() const {
@@ -24,11 +20,6 @@ std::unique_ptr<ImageDecoder> HdrDecoder::Creator::Create() const {
 
 ImageWrapper HdrDecoder::Decode(const std::string &file) {
     ImageWrapper imgWrapper;
-
-    if (!stbi_is_hdr(file.c_str())) {
-        ALOGD("%s is not HDR?", file.c_str());
-        return imgWrapper;
-    }
 
     int width = 0, height = 0, comp = 0;
     float *data = stbi_loadf(file.c_str(), &width, &height, &comp, 0);
