@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <chrono>
 
 #include "image_decoder.h"
 #include "image_encoder.h"
@@ -24,7 +25,14 @@ int main(int argc, char *argv[]) {
     }
 
     quink::HableMapper tonemapper;
-    auto img = tonemapper.Map(std::move(imgIn));
+    auto t1 = std::chrono::high_resolution_clock::now();
+    tonemapper.Map(imgIn, false);
+    auto t2 = std::chrono::high_resolution_clock::now();
+    auto img = tonemapper.Map(imgIn, false);
+    auto t3 = std::chrono::high_resolution_clock::now();
+    printf("%lld ms\n", std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count());
+    printf("%lld ms\n", std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count());
+
     quink::ImageStore::StoreImage("tonemap.png", quink::ImageFormat::PngImage, std::move(img));
 
     return 0;
