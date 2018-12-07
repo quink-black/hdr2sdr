@@ -14,12 +14,11 @@ src = files(
 	'stb_image.c',
 	'tonemapper.cpp')
 
-include_dir = include_directories('third-party/install/include', 'include')
-include_public_dir = include_directories('include')
+include_dir = include_directories('include')
 jpeg_dep = dependency('libjpeg', version : '>= 2.0.0')
 
 libhdr2sdr = shared_library('hdr2sdr', src, include_directories : include_dir, dependencies : [jpeg_dep])
-libhdr2sdr_dep = declare_dependency(include_directories : include_public_dir, link_with : libhdr2sdr)
+libhdr2sdr_dep = declare_dependency(include_directories : include_dir, link_with : libhdr2sdr)
 
 executable('image_decoder_unittest', 'image_decoder_unittest.cpp', include_directories : include_dir, link_with : libhdr2sdr)
 executable('image_encoder_unittest', 'image_encoder_unittest.cpp', include_directories : include_dir, link_with : libhdr2sdr)
