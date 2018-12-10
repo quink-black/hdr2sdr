@@ -7,14 +7,14 @@
 
 namespace quink {
 
-int HdrDecoder::Creator::Probe(const std::string &file) const {
+int HdrDecoderFactory::Probe(const std::string &file) const {
     if (stbi_is_hdr(file.c_str()))
         return SCORE_DEFINITELY;
     else
         return SCORE_UNSUPPORT;
 }
 
-std::unique_ptr<ImageDecoder> HdrDecoder::Creator::Create() const {
+std::unique_ptr<ImageDecoder> HdrDecoderFactory::Create() const {
     return std::unique_ptr<ImageDecoder>(new HdrDecoder());
 }
 

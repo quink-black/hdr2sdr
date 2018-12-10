@@ -27,7 +27,7 @@ static void convert(void *p, int offset, int type, float *dst) {
     }
 }
 
-int OpenEXRDecoder::Creator::Probe(const std::string &file) const {
+int OpenEXRDecoderFactory::Probe(const std::string &file) const {
     auto suffix_pos = file.rfind(".");
     if (suffix_pos != std::string::npos) {
         std::string suffix = file.substr(suffix_pos);
@@ -38,7 +38,7 @@ int OpenEXRDecoder::Creator::Probe(const std::string &file) const {
     return SCORE_UNSUPPORT;
 }
 
-std::unique_ptr<ImageDecoder> OpenEXRDecoder::Creator::Create() const {
+std::unique_ptr<ImageDecoder> OpenEXRDecoderFactory::Create() const {
     return std::unique_ptr<ImageDecoder>(new OpenEXRDecoder());
 }
 

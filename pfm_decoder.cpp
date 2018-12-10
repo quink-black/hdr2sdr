@@ -4,7 +4,7 @@
 #include <functional>
 
 namespace quink {
-int PfmDecoder::Creator::Probe(const std::string &file) const {
+int PfmDecoderFactory::Probe(const std::string &file) const {
     auto suffix_pos = file.rfind(".");
     if (suffix_pos != std::string::npos) {
         std::string suffix = file.substr(suffix_pos);
@@ -15,7 +15,7 @@ int PfmDecoder::Creator::Probe(const std::string &file) const {
     return SCORE_UNSUPPORT;
 }
 
-std::unique_ptr<ImageDecoder> PfmDecoder::Creator::Create() const {
+std::unique_ptr<ImageDecoder> PfmDecoderFactory::Create() const {
     return std::unique_ptr<ImageDecoder>(new PfmDecoder());
 }
 

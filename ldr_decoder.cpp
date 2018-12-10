@@ -5,14 +5,14 @@
 
 namespace quink {
 
-int LdrDecoder::Creator::Probe(const std::string &file) const {
+int LdrDecoderFactory::Probe(const std::string &file) const {
     int x, y, comp;
     if (stbi_info(file.c_str(), &x, &y, &comp))
         return SCORE_UNSUPPORT + 1;
     return SCORE_UNSUPPORT;
 }
 
-std::unique_ptr<ImageDecoder> LdrDecoder::Creator::Create() const {
+std::unique_ptr<ImageDecoder> LdrDecoderFactory::Create() const {
     return std::unique_ptr<ImageDecoder>(new LdrDecoder());
 }
 

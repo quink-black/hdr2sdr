@@ -11,17 +11,17 @@
 namespace quink {
 
 ImageWrapper ImageLoader::LoadImage(const std::string &file) {
-    const DecoderCreatorListType &CreatorList = GetDecoderCreatorList();
+    const ImageDecoderFactoryListType &CreatorList = GetImageDecoderFactoryList();
 
-    using CreatorScorePair = std::pair<std::shared_ptr<ImageDecoder::DecoderCreator>, int>;
+    using CreatorScorePair = std::pair<std::shared_ptr<ImageDecoderFactory>, int>;
     std::vector<CreatorScorePair> creatorScore;
     for (const auto &creator : CreatorList) {
         int n = creator->Probe(file);
-        if (n == ImageDecoder::DecoderCreator::SCORE_DEFINITELY) {
+        if (n == ImageDecoderFactory::SCORE_DEFINITELY) {
             ALOGD("create %s", creator->GetDecoderName().c_str());
             auto decoder = creator->Create();
             return decoder->Decode(file);
-        } else if (n > ImageDecoder::DecoderCreator::SCORE_UNSUPPORT) {
+        } else if (n > ImageDecoderFactory::SCORE_UNSUPPORT) {
             creatorScore.push_back(CreatorScorePair(creator, n));
         }
     }
@@ -39,12 +39,12 @@ ImageWrapper ImageLoader::LoadImage(const std::string &file) {
     return decoder->Decode(file);
 }
 
-const ImageLoader::DecoderCreatorListType &ImageLoader::GetDecoderCreatorList() {
-    static DecoderCreatorListType CreatorList{
-        std::shared_ptr<ImageDecoder::DecoderCreator>(new PfmDecoder::Creator),
-        std::shared_ptr<ImageDecoder::DecoderCreator>(new OpenEXRDecoder::Creator),
-        std::shared_ptr<ImageDecoder::DecoderCreator>(new HdrDecoder::Creator),
-        std::shared_ptr<ImageDecoder::DecoderCreator>(new LdrDecoder::Creator),
+const ImageLoader::ImageDecoderFactoryListType &ImageLoader::GetImageDecoderFactoryList() {
+    static ImageDecoderFactoryListType CreatorList{
+        std::shared_ptr<ImageDecoderFactory>(new PfmDecoderFactory),
+        std::shared_ptr<ImageDecoderFactory>(new OpenEXRDecoderFactory),
+        std::shared_ptr<ImageDecoderFactory>(new HdrDecoderFactory),
+        std::shared_ptr<ImageDecoderFactory>(new LdrDecoderFactory),
     };
 
     return CreatorList;
