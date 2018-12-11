@@ -20,8 +20,11 @@ public:
 private:
     struct Table {
         Table();
+        float Map(float f) const;
+
         const float mPrecise = 0.001;
         const float mUpper = 10.0;
+        const int mTableSize = mUpper / mPrecise;
         std::vector<float> mData;
     };
 

@@ -1,9 +1,11 @@
 #include "tonemapper.h"
 
+#include <assert.h>
+
 namespace quink {
 
 HableMapper::Table::Table() {
-    int n = mUpper / mPrecise;
+    int n = mTableSize;
     auto img = std::make_shared<Image<float>>(n, 1);
     for (int i = 0; i < n; i++) {
         img->mData[i] = mPrecise * i;
@@ -13,6 +15,16 @@ HableMapper::Table::Table() {
     for (int i = 0; i < n; i++) {
         mData.push_back(imgOut->mData[i]);
     }
+}
+
+float HableMapper::Table::Map(float f) const {
+    assert(f >= 0.0);
+
+    int index = f / mPrecise;
+    if (index >= mTableSize)
+        return mData.back();
+    else
+        return mData[index];
 }
 
 const HableMapper::Table &HableMapper::GetTable() {
@@ -52,14 +64,9 @@ std::shared_ptr<Image<float>> HableMapper::Map(std::shared_ptr<Image<float>> img
         out = std::make_shared<Image<float>>(img->mWidth, img->mHeight);
 
     const Table &table = GetTable();
-    int tableSize = table.mData.size();
     int n = img->DataLength();
     for (int i = 0; i < n; i++) {
-        int index = img->mData[i] / table.mPrecise;
-        if (index >= tableSize)
-            out->mData[i] = table.mData.back();
-        else
-            out->mData[i] = table.mData[index];
+        out->mData[i] = table.Map(img->mData[i]);
     }
 
     return out;
